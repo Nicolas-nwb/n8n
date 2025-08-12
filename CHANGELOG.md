@@ -18,6 +18,7 @@
 * **Google Gemini Node:** Don't pass hardcoded value for durationSeconds when generating a video ([#17793](https://github.com/n8n-io/n8n/issues/17793)) ([460e3b1](https://github.com/n8n-io/n8n/commit/460e3b1dfdb64bf4501dcf9ff1a480da34c64b6a))
 * **Google Sheets Node:** Make it possible to set cell values empty on updates ([#17224](https://github.com/n8n-io/n8n/issues/17224)) ([d924d82](https://github.com/n8n-io/n8n/commit/d924d82ee2862f398f66eb624815694893527d48))
 * Hide settings hint from log view ([#17813](https://github.com/n8n-io/n8n/issues/17813)) ([a46fa60](https://github.com/n8n-io/n8n/commit/a46fa6072e4d5bd02611625c60fe6fff7d31c731))
+* **OpenAI Chat Model Node:** Respect reasoning effort by passing the reasoning parameter correctly
 * **Microsoft Teams Trigger Node:** Forbidden when trying to listen for channel messages ([#17777](https://github.com/n8n-io/n8n/issues/17777)) ([bc97584](https://github.com/n8n-io/n8n/commit/bc97584c0c6e58878dd0e9708062813c099687a2))
 * **Stop and Error Node:** Show error message when error type is an object ([#17898](https://github.com/n8n-io/n8n/issues/17898)) ([aced4bf](https://github.com/n8n-io/n8n/commit/aced4bf86f343f768ddb81485c24e69d5cf12530))
 * **Structured Output Parser Node:** Handle passed objects that do not match schema ([#17774](https://github.com/n8n-io/n8n/issues/17774)) ([1fb78cb](https://github.com/n8n-io/n8n/commit/1fb78cb0eabfaedad16568e21254c42dae6cebee))
