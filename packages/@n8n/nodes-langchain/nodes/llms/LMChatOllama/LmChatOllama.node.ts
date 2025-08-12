@@ -14,6 +14,29 @@ import { ollamaModel, ollamaOptions, ollamaDescription } from '../LMOllama/descr
 import { makeN8nLlmFailedAttemptHandler } from '../n8nLlmFailedAttemptHandler';
 import { N8nLlmTracing } from '../N8nLlmTracing';
 
+class ChatOllamaWithReasoning extends ChatOllama {
+	declare think?: boolean;
+	declare reasoningEffort?: 'low' | 'medium' | 'high';
+
+	constructor(
+		fields: ChatOllamaInput & { think?: boolean; reasoningEffort?: 'low' | 'medium' | 'high' },
+	) {
+		super(fields);
+		this.think = fields.think;
+		this.reasoningEffort = fields.reasoningEffort;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	invocationParams(options: any) {
+		const params = super.invocationParams(options);
+		if (this.think === true && this.reasoningEffort !== undefined) {
+			(params as any).think = true;
+			(params as any).reasoning = { effort: this.reasoningEffort };
+		}
+		return params;
+	}
+}
+
 export class LmChatOllama implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Ollama Chat Model',
@@ -57,14 +80,17 @@ export class LmChatOllama implements INodeType {
 		const credentials = await this.getCredentials('ollamaApi');
 
 		const modelName = this.getNodeParameter('model', itemIndex) as string;
-		const options = this.getNodeParameter('options', itemIndex, {}) as ChatOllamaInput;
+		const options = this.getNodeParameter('options', itemIndex, {}) as ChatOllamaInput & {
+			think?: boolean;
+			reasoningEffort?: 'low' | 'medium' | 'high';
+		};
 		const headers = credentials.apiKey
 			? {
 					Authorization: `Bearer ${credentials.apiKey as string}`,
 				}
 			: undefined;
 
-		const model = new ChatOllama({
+		const model = new ChatOllamaWithReasoning({
 			...options,
 			baseUrl: credentials.baseUrl as string,
 			model: modelName,

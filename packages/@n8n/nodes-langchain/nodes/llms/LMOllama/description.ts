@@ -71,6 +71,32 @@ export const ollamaOptions: INodeProperties = {
 	default: {},
 	options: [
 		{
+			displayName: 'Enable Thinking',
+			name: 'think',
+			type: 'boolean',
+			default: false,
+			description:
+				'Enables reasoning mode for compatible models to produce a chain of thought before the final answer.',
+		},
+		{
+			displayName: 'Reasoning Effort',
+			name: 'reasoningEffort',
+			type: 'options',
+			displayOptions: {
+				show: {
+					think: [true],
+				},
+			},
+			options: [
+				{ name: 'Low', value: 'low' },
+				{ name: 'Medium', value: 'medium' },
+				{ name: 'High', value: 'high' },
+			],
+			default: 'medium',
+			description:
+				'Controls how much effort the model spends when reasoning. Higher effort may produce better answers at the cost of speed.',
+		},
+		{
 			displayName: 'Sampling Temperature',
 			name: 'temperature',
 			default: 0.7,
@@ -105,6 +131,22 @@ export const ollamaOptions: INodeProperties = {
 			typeOptions: { minValue: 0 },
 			description:
 				'Adjusts the penalty for tokens that have already appeared in the generated text. Higher values discourage repetition.',
+		},
+		{
+			displayName: 'Tokens to Keep',
+			name: 'numKeep',
+			type: 'number',
+			default: undefined,
+			description:
+				'Number of tokens to retain from the initial prompt when context is reset. Leave empty for default.',
+		},
+		{
+			displayName: 'Random Seed',
+			name: 'seed',
+			type: 'number',
+			default: undefined,
+			description:
+				'Seed for random number generation. Setting a value makes outputs deterministic.',
 		},
 		{
 			displayName: 'Keep Alive',
@@ -195,8 +237,51 @@ export const ollamaOptions: INodeProperties = {
 				'Adjusts the penalty factor for repeated tokens. Higher values more strongly discourage repetition. Set to 1.0 to disable repetition penalty.',
 		},
 		{
+			displayName: 'Tail Free Sampling (TFS-Z)',
+			name: 'tfsZ',
+			type: 'number',
+			default: undefined,
+			description: 'Controls tail free sampling. Values closer to 1 reduce low-probability tokens.',
+		},
+		{
+			displayName: 'Typical Probability',
+			name: 'typicalP',
+			type: 'number',
+			default: undefined,
+			description: 'Typical probability threshold for token selection.',
+		},
+		{
+			displayName: 'Repeat Last N',
+			name: 'repeatLastN',
+			type: 'number',
+			default: undefined,
+			description:
+				'Number of previous tokens to consider when applying repetition penalty. Set to -1 to use the full context.',
+		},
+		{
+			displayName: 'Mirostat',
+			name: 'mirostat',
+			type: 'number',
+			default: undefined,
+			description: 'Enable Mirostat sampling, 0 to disable, 1 or 2 to enable different versions.',
+		},
+		{
+			displayName: 'Mirostat Tau',
+			name: 'mirostatTau',
+			type: 'number',
+			default: undefined,
+			description: 'Target entropy for Mirostat sampling. Higher values produce more diverse text.',
+		},
+		{
+			displayName: 'Mirostat Eta',
+			name: 'mirostatEta',
+			type: 'number',
+			default: undefined,
+			description: 'Learning rate for the Mirostat algorithm.',
+		},
+		{
 			displayName: 'Use Memory Locking',
-			name: 'useMLock',
+			name: 'useMlock',
 			type: 'boolean',
 			default: false,
 			description:
@@ -204,7 +289,7 @@ export const ollamaOptions: INodeProperties = {
 		},
 		{
 			displayName: 'Use Memory Mapping',
-			name: 'useMMap',
+			name: 'useMmap',
 			type: 'boolean',
 			default: true,
 			description:
@@ -217,6 +302,36 @@ export const ollamaOptions: INodeProperties = {
 			default: false,
 			description:
 				'Whether to only load the model vocabulary without the weights. Useful for quickly testing tokenization.',
+		},
+		{
+			displayName: 'NUMA Awareness',
+			name: 'numa',
+			type: 'boolean',
+			default: undefined,
+			description:
+				'Enable Non-Uniform Memory Access optimizations on systems with multiple CPU sockets.',
+		},
+		{
+			displayName: 'Use F16 Key/Value',
+			name: 'f16Kv',
+			type: 'boolean',
+			default: undefined,
+			description:
+				'Store key/value tensors in 16-bit floats for faster generation at the cost of memory.',
+		},
+		{
+			displayName: 'Return All Logits',
+			name: 'logitsAll',
+			type: 'boolean',
+			default: undefined,
+			description: 'Return logits for all tokens instead of just the last one.',
+		},
+		{
+			displayName: 'Embedding Only',
+			name: 'embeddingOnly',
+			type: 'boolean',
+			default: undefined,
+			description: 'Load only embedding layers when generation is not needed.',
 		},
 		{
 			displayName: 'Output Format',
